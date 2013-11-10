@@ -2,6 +2,8 @@
   "name": "G+ Hangouts Unlimited",
   "version": "1.0",
   "description": "Automatically confirms the 90-minute periodic prompt asking \"Are you still there?\", so you can talk on Google+ Hangouts without worrying about being disconnected.",
+  "permissions": [ "tabs", "background" ],
+  "background": { "scripts": ["background.js"] },
   "content_scripts" : [
     {
       "matches" : [

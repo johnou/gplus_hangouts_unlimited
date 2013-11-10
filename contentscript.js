@@ -1,30 +1,45 @@
 (function() {
 
-    function simulate(target, eventName) {
-        var event = document.createEvent("MouseEvents");
-        event.initMouseEvent(eventName, true, true, document.defaultView, 0, 0, 0, 0, 0, false, false, false, false, 0, target);
-        target.dispatchEvent(event);
-    }
+    var simulateClick = function(target) {
+        ["mouseover", "mousedown", "mouseup", "mouseout"].forEach(function(eventName) { 
+            var event = new MouseEvent(eventName, { view: document.defaultView, bubbles: true, cancelable: true });
+            target.dispatchEvent(event);
+        });
+    };
 
-    function simulateClick(target) {
-        simulate(target, "mouseover");
-        simulate(target, "mousedown");
-        simulate(target, "mouseup");
-        simulate(target, "mouseout");
-    }
-
-    setInterval(function () {
+    var antiIdle = function() {
         var elements = document.getElementsByTagName("div");
         for (var i = 0; i < elements.length; i++) {
             var element = elements[i];
             if (element.getAttribute("role") == "button") {
-                var value = element.innerHTML;
-                if (value.indexOf("Yes") >= 0 || value.indexOf("Kyll") >= 0) {
+                if (element.innerHTML.indexOf("Yes") >= 0) {
                     simulateClick(element);
                     break;
                 }
             }
         }
-    }, 16000);
+    };
+
+    var toggleMute = function() {
+        var elements = document.getElementsByTagName("div");
+        for (var i = 0; i < elements.length; i++) {
+            var element = elements[i];
+            if (element.getAttribute("role") == "button") {
+                var label = element.getAttribute("aria-label");
+                if (label != null && label.indexOf("Microphone") >= 0) {
+                    simulateClick(element.children[0]);
+                    break;
+                }
+            }
+        }
+    };
+
+    chrome.extension.onMessage.addListener(function(msg, sender, sendResponse) {
+        if (msg.action == "toggle_mute") {
+            toggleMute();
+        }
+    });
+
+    setInterval(antiIdle, 15555);
 
 })();
