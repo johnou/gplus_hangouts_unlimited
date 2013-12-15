@@ -6,13 +6,13 @@
             chrome.windows.getAll({ populate: true }, function(windows) {
                 windows.forEach(function(window) {
                     window.tabs.forEach(function(tab) {
-                        chrome.tabs.sendMessage(tab.id, {action: "toggle_mute"});
+                        chrome.tabs.sendMessage(tab.id, {action: "toggle_mute", type: event.data.type});
                     });
                 });
             });
         };
-        ws.onclose = function(){
-            setTimeout(function() { listen(url) }, 5000);
+        ws.onclose = function() {
+            setTimeout(function() { listen(url) }, 4000);
         };
     }
 

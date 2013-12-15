@@ -20,13 +20,13 @@
         }
     };
 
-    var toggleMute = function() {
+    var toggleMute = function(mute) {
         var elements = document.getElementsByTagName("div");
         for (var i = 0; i < elements.length; i++) {
             var element = elements[i];
             if (element.getAttribute("role") == "button") {
                 var label = element.getAttribute("aria-label");
-                if (label != null && label.indexOf("Microphone") >= 0) {
+                if (label != null && label.toLowerCase().indexOf("microphone") >= 0) {
                     simulateClick(element.children[0]);
                     break;
                 }
